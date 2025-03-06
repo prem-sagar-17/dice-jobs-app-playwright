@@ -87,7 +87,7 @@ test("Applying for job", async ({ page }) => {
         await jobPage.getByRole("button", { name: "Easy apply" }).click();
         await jobPage.waitForLoadState("load");
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 10; i++) {
           const submitButton = jobPage.locator("//button[@class='seds-button-primary btn-next']");
           if (await submitButton.isVisible()) {
             await submitButton.click();
