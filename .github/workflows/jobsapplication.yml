@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Allows manual trigger from GitHub Actions UI
 
 jobs:
-  test:
+  dice_job_application:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
