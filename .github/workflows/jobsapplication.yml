@@ -24,8 +24,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Verify Playwright Installation
+        run: npx playwright --version
+
       - name: Run Playwright Jobs Apply Script
-        run: npx playwright test
+        run: npx playwright test tests/dice-jobs.spec.ts
         env:
           EMAIL: ${{ secrets.DICE_EMAIL }}
           PASSWORD: ${{ secrets.DICE_PASSWORD }}
