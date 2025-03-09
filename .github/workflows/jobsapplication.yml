@@ -37,6 +37,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-$(date +'%Y-%m-%d')
-          path: playwright-report/
+          name: playwright-report
+          path: playwright-report
           retention-days: 2
