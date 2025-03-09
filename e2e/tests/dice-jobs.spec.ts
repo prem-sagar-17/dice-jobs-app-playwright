@@ -3,7 +3,7 @@ import { LoginFunctions } from "../pages/LoginPage";
 import { HomeFunctions } from "../pages/HomePage";
 import { JobFunctions } from "../pages/JobPage";
 
-test.setTimeout(3 * 60 * 1000); // 20 minutes timeout
+test.setTimeout(20 * 60 * 1000); // 20 minutes timeout
 
 test.describe("Dice Job Application Automation", () => {
   test("Applying for job", async ({ page }) => {
