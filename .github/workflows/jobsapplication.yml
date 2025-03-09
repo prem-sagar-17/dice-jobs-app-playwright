@@ -28,7 +28,7 @@ jobs:
         run: npx playwright --version
 
       - name: Run Playwright Jobs Apply Script
-        run: npx playwright test --headed
+        run: npx playwright test
         env:
           EMAIL: ${{ secrets.DICE_EMAIL }}
           PASSWORD: ${{ secrets.DICE_PASSWORD }}
