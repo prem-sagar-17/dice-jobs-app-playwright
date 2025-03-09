@@ -1,33 +1,36 @@
-# **Job Application Automation using Playwright**
+# 🚀 Job Application Automation using Playwright
 
-This project automates job applications on Dice.com using **Playwright**. It logs in, searches for jobs, and applies automatically while tracking results in an Excel file.
-
-## **📌 Features**
-- ✅ Automated login using credentials from **GitHub Secrets**  
-- ✅ Searches for jobs based on predefined filters  
-- ✅ Applies only to **new** job listings  
-- ✅ Handles pagination and continues until all pages are processed  
-- ✅ Generates a report (`job_applications.xlsx`) inside the `playwright-report/` folder  
+This project automates job applications on **Dice.com** using **Playwright**. It logs in, searches for jobs, and applies automatically while tracking results in an **Excel file**.
 
 ---
 
-## **🛠️ Setup Instructions**
+## 📌 **Features**
+- ✅ **Automated login** using credentials from **GitHub Secrets**  
+- ✅ **Searches** for jobs based on predefined filters  
+- ✅ **Applies only** to new job listings (avoids duplicates)  
+- ✅ **Handles pagination** and continues until all pages are processed  
+- ✅ **Generates reports** (`job_applications.xlsx`) in `playwright-report/`  
 
-### **1️⃣ Install Dependencies**
+---
+
+## 🛠️ **Setup Instructions**
+
+### 1️⃣ **Install Dependencies**
 Run the following command to install required packages:
 
 ```sh
 npm ci
+```
 2️⃣ Set Up GitHub Secrets
 In your GitHub repository, go to:
 Settings → Secrets and variables → Actions → New repository secret
 
-Add the following secrets:
+Add these secrets:
 
 DICE_EMAIL → Your Dice.com login email
 DICE_PASSWORD → Your Dice.com password
 🚀 Running Tests Locally
-Login & Apply for Jobs
+Run Playwright Tests
 sh
 Copy
 Edit
@@ -37,10 +40,10 @@ sh
 Copy
 Edit
 EMAIL=your_email PASSWORD=your_password npx playwright test
-📊 Test Report & Excel Export
-Test Reports → Saved in playwright-report/
-Excel Report (job_applications.xlsx) is also stored inside playwright-report/
-To view the report:
+📊 Test Reports & Excel Export
+Test Reports → Stored in playwright-report/
+Excel Report → job_applications.xlsx is inside playwright-report/
+To view the test report, run:
 
 sh
 Copy
@@ -49,7 +52,7 @@ npx playwright show-report
 🛠️ GitHub Actions (CI/CD)
 This project runs automatically using GitHub Actions.
 
-Workflow Configuration (.github/workflows/playwright.yml)
+📜 Workflow Configuration (.github/workflows/playwright.yml)
 yaml
 Copy
 Edit
@@ -57,7 +60,7 @@ name: Job Application Automation
 
 on:
   schedule:
-    - cron: "0 3 * * *"  # Runs every day at 3 AM UTC
+    - cron: "0 3 * * *"  # Runs daily at 3 AM UTC
   workflow_dispatch:  # Manual trigger
 
 jobs:
@@ -86,7 +89,7 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-📝 Folder Structure
+📁 Folder Structure
 bash
 Copy
 Edit
@@ -101,17 +104,11 @@ Edit
  ├── 📄 package.json
  ├── 📄 playwright.config.ts
  ├── 📄 README.md
-👨‍💻 Contribution
+🛠 Contribution Guide
 Fork the repository
 Create a feature branch (git checkout -b feature-name)
 Commit changes (git commit -m "Add feature")
 Push the branch (git push origin feature-name)
-Open a Pull Request
+Create a Pull Request
 ❓ Issues & Support
-If you encounter any issues, create a GitHub Issue. 🚀
-
-markdown
-Copy
-Edit
-
-This **README.md** file is **GitHub-friendly** and ready for direct use. 🚀
+If you encounter any issues, create a GitHub Issue 🚀
