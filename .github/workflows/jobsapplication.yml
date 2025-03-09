@@ -40,10 +40,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 2
-
-      - name: Upload Job Application Excel Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: job-applications-excel
-          path: playwright-report/job-results/job_applications.xlsx
-          retention-days: 2
