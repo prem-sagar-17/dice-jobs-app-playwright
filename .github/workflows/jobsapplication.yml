@@ -1,4 +1,4 @@
-name: Apply for jobs daily
+name: Apply for DICE jobs daily
 on:
   schedule:
     # Runs at 6 AM CST (Central Standard Time) / 7 AM EST (Eastern Standard Time) daily
@@ -37,6 +37,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-$(date +'%Y-%m-%d')
           path: playwright-report/
           retention-days: 2
