@@ -25,6 +25,11 @@ jobs:
   dice_job_application:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false  # Ensures the retry attempt still runs
+      max-parallel: 1
+      matrix:
+        attempt: [1, 2]  # Runs once, and retries only once if it fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
