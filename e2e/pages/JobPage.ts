@@ -32,7 +32,7 @@ export class JobFunctions {
         .filter({ hasText: "Applied" })
         .first();
 
-      if (await appliedTextLocator.isVisible()) {
+      if ((await appliedTextLocator.isVisible()) || !isRelevant) {
         console.log("⏭️ Skipping: Already applied job found.");
         return;
       }
