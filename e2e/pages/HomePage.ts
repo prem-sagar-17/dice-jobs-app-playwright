@@ -18,7 +18,7 @@ export class HomeFunctions {
     await this.locators.postedTodayRadio().click();
     await this.locators.filterSearchCheckbox().click();
 
-    console.log("🔎 Job search filters applied.");
+    console.log(`🔎 Job search filters applied. ${process.env.DATE_POSTED} for ${process.env.JOB_ROLE}`);
   }
 
   async GetPageNumber() {
