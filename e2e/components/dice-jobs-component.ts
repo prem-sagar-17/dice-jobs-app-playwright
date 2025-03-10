@@ -52,7 +52,7 @@ export class Locators {
   }
 
   postedTodayRadio() {
-    return this.page.getByRole("radio", { name: "Today" });
+    return this.page.getByRole("radio", { name: `${process.env.DATE_POSTED || "Today"}`});
   }
 
   filterSearchCheckbox() {

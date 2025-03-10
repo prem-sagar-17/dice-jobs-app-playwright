@@ -11,7 +11,7 @@ export class HomeFunctions {
   }
 
   async searchJobs() {
-    await this.locators.jobTitleField().fill("java full stack developer");
+    await this.locators.jobTitleField().fill(process.env.JOB_ROLE || "java full stack developer");
     await this.locators.location().click();
     await this.locators.locationField().fill("united states");
     await this.locators.unitedStatesOption().click();
