@@ -48,8 +48,8 @@ jobs:
         env:
           EMAIL: ${{ secrets.DICE_EMAIL }}
           PASSWORD: ${{ secrets.DICE_PASSWORD }}
-          JOB_ROLE: ${{ github.event.inputs.job_role }}
-          DATE_POSTED: ${{ github.event.inputs.date_posted }}
+          JOB_ROLE: ${{ github.event.inputs.job_role }} || "java full stack developer"
+          DATE_POSTED: ${{ github.event.inputs.date_posted }} || "Today"
 
       - name: Upload Playwright Reports
         uses: actions/upload-artifact@v4
