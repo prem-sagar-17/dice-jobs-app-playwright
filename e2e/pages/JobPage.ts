@@ -77,7 +77,7 @@ export class JobFunctions {
       // Scroll into view before checking visibility
       await corpToCorpLocator.scrollIntoViewIfNeeded();
 
-      if (!(await corpToCorpLocator.isVisible().catch(() => false))) {
+      if (!(await corpToCorpLocator.isVisible({ timeout: 10000 }).catch(() => false))) {
         console.log(`❌ Skipping: ${jobTitle} (Corp to Corp not visible)`);
         this.jobResults.push({
           title: jobTitle,
