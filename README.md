@@ -66,34 +66,26 @@ npx playwright show-report
 
 ```bash
 📂 e2e/
-├── 📂 components/        # Locators   
-│   ├── dice-jobs-component.ts
-├── 📂 pages/          # Page Object Model (POM) classes 
-│   ├── HomePage.ts
-│   ├── JobPage.ts
-│   ├── LoginPage.ts
-├── 📂 tests/           # Playwright tests
-│   ├── dice-jobs.spec.ts
-├── 📂 playwright-report/  # Test results (HTML + Excel)
-├── 📄 eslint.config.js
-├── 📄 package.json
-├── 📄 playwright.config.ts
-├── 📄 README.md
-├── 📄 tsconfig.json
-```
-
----
-
-## 🛠 Contribution Guide
-
-1. **Fork** the repository  
-2. **Create a feature branch**: `git checkout -b feature-name`  
-3. **Commit changes**: `git commit -m "Add feature"`  
-4. **Push the branch**: `git push origin feature-name`  
-5. **Create a Pull Request**  
-
----
-
-## ❓ Issues & Support
-
-If you encounter any issues, create a **GitHub Issue** 🚀
+ ├── 📂 components/            # Locators
+ │    ├── dice-jobs-component.ts
+ ├── 📂 pages/            # Page Object Model (POM) classes
+ │    ├── HomePage.ts
+ │    ├── JobPage.ts
+ │    ├── LoginPage.ts
+ ├── 📂 tests/            # Playwright tests
+ │    ├── dice-jobs.spec.ts
+ ├── 📂 playwright-report/  # Test results (HTML + Excel)
+ ├── 📄 eslint.config.ts
+ ├── 📄 package-lock.json
+ ├── 📄 package.json
+ ├── 📄 playwright.config.ts
+ ├── 📄 README.md
+ ├── 📄 tsconfig.js
+🛠 Contribution Guide
+Fork the repository
+Create a feature branch (git checkout -b feature-name)
+Commit changes (git commit -m "Add feature")
+Push the branch (git push origin feature-name)
+Create a Pull Request
+❓ Issues & Support
+If you encounter any issues, create a GitHub Issue 🚀

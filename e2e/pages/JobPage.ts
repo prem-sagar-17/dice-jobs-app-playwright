@@ -53,8 +53,6 @@ export class JobFunctions {
       }
 
       const appsubmitted = this.locators.appSubmitted(jobPage);
-      // Wait for page load
-      await jobPage.waitForLoadState("domcontentloaded");
 
       // Check if job application is already submitted
       await appsubmitted
