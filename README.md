@@ -94,16 +94,21 @@ bash
 Copy
 Edit
 📂 e2e/
+ ├── 📂 components/            # Locators
+ │    ├── dice-jobs-component.ts
  ├── 📂 pages/            # Page Object Model (POM) classes
- │    ├── LoginPage.ts
  │    ├── HomePage.ts
  │    ├── JobPage.ts
+ │    ├── LoginPage.ts
  ├── 📂 tests/            # Playwright tests
  │    ├── dice-jobs.spec.ts
  ├── 📂 playwright-report/  # Test results (HTML + Excel)
+ ├── 📄 eslint.config.ts
+ ├── 📄 package-lock.json
  ├── 📄 package.json
  ├── 📄 playwright.config.ts
  ├── 📄 README.md
+ ├── 📄 tsconfig.js
 🛠 Contribution Guide
 Fork the repository
 Create a feature branch (git checkout -b feature-name)
