@@ -7,8 +7,8 @@ test.setTimeout(20 * 60 * 1000); // 20 minutes timeout
 
 test.describe("Dice Job Application Automation", () => {
   test("Applying for job", async ({ page }) => {
-    const EMAIL = process.env.EMAIL || "premsagar1078@gmail.com";
-    const PASSWORD = process.env.PASSWORD || "Prem@1997";
+    const EMAIL = process.env.EMAIL;
+    const PASSWORD = process.env.PASSWORD;
 
     const loginFunctions = new LoginFunctions(page);
     const homeFunctions = new HomeFunctions(page);
