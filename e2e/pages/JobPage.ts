@@ -161,7 +161,7 @@ export class JobFunctions {
       link: "", // Empty cell for formatting
     });
 
-    const reportFolder = "playwright-report/Excel-report"; // Default Playwright report folder
+    const reportFolder = "job-reports"; // ✅ Store reports separately
     const filePath = path.join(reportFolder, "job_applications.xlsx");
 
     // Ensure the folder exists before writing the file
