@@ -69,15 +69,17 @@ npx playwright show-report
 ├── 📂 components/        # Locators   
 │   ├── dice-jobs-component.ts
 ├── 📂 pages/          # Page Object Model (POM) classes 
-│   ├── LoginPage.ts
 │   ├── HomePage.ts
 │   ├── JobPage.ts
+│   ├── LoginPage.ts
 ├── 📂 tests/           # Playwright tests
 │   ├── dice-jobs.spec.ts
 ├── 📂 playwright-report/  # Test results (HTML + Excel)
+├── 📄 eslint.config.js
 ├── 📄 package.json
 ├── 📄 playwright.config.ts
 ├── 📄 README.md
+├── 📄 tsconfig.json
 ```
 
 ---
