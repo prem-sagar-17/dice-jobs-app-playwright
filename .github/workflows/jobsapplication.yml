@@ -58,3 +58,11 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 2
+
+      - name: Upload Job Applications Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: job-applications-report
+          path: xslx-reports/job_applications.xlsx
+          retention-days: 7
