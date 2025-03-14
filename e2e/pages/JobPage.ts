@@ -47,7 +47,7 @@ export class JobFunctions {
 
       if (!jobPage) {
         console.warn(
-          "⚠️ Job page opened in the same tab. Skipping popup handling."
+          "⚠️ Job page opened in the same tab. Skipping popup handling.",
         );
         return;
       }
@@ -57,7 +57,7 @@ export class JobFunctions {
       await jobPage.waitForLoadState("domcontentloaded");
 
       // Check if job application is already submitted
-      const isAppSubmittedVisible = await appsubmitted
+      await appsubmitted
         .waitFor({ state: "visible", timeout: 10000 })
         .catch(() => false);
 
@@ -92,7 +92,7 @@ export class JobFunctions {
       }
 
       console.log(
-        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application..."
+        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application...",
       );
 
       // ✅ Attempt Easy Apply if available
@@ -118,7 +118,7 @@ export class JobFunctions {
         });
       } catch (error) {
         console.log(
-          `❌ Easy Apply failed for: ${jobTitle} - ${(error as Error).message}`
+          `❌ Easy Apply failed for: ${jobTitle} - ${(error as Error).message}`,
         );
         this.jobResults.push({
           title: jobTitle,
@@ -145,13 +145,13 @@ export class JobFunctions {
 
     // Count totals directly from the stored values
     const totalApplied = this.jobResults.filter(
-      (job) => job.applied === "✅"
+      (job) => job.applied === "✅",
     ).length;
     const totalNotApplied = this.jobResults.filter(
-      (job) => job.notApplied === "✅"
+      (job) => job.notApplied === "✅",
     ).length;
     const totalAlreadyApplied = this.jobResults.filter(
-      (job) => job.alreadyApplied === "✅"
+      (job) => job.alreadyApplied === "✅",
     ).length;
 
     // Add Summary Row
