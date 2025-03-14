@@ -52,7 +52,9 @@ export class Locators {
   }
 
   postedTodayRadio() {
-    return this.page.getByRole("radio", { name: `${process.env.DATE_POSTED || "Today"}`});
+    return this.page.getByRole("radio", {
+      name: `${process.env.DATE_POSTED || "Today"}`,
+    });
   }
 
   filterSearchCheckbox() {
@@ -98,7 +100,7 @@ export class Locators {
 
   corpToCorp(jobPage: Page) {
     return jobPage.locator(
-      "//span[@id='employmentDetailChip: Accepts corp to corp applications']"
+      "//span[@id='employmentDetailChip: Accepts corp to corp applications']",
     );
   }
 
@@ -108,7 +110,7 @@ export class Locators {
 
   pageNext() {
     return this.page.locator(
-      "//li[@class='pagination-next page-item ng-star-inserted disabled']"
+      "//li[@class='pagination-next page-item ng-star-inserted disabled']",
     );
   }
 }

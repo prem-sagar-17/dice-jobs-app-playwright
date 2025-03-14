@@ -11,14 +11,18 @@ export class HomeFunctions {
   }
 
   async searchJobs() {
-    await this.locators.jobTitleField().fill(process.env.JOB_ROLE || "java full stack developer");
+    await this.locators
+      .jobTitleField()
+      .fill(process.env.JOB_ROLE || "java full stack developer");
     await this.locators.location().click();
     await this.locators.locationField().fill("united states");
     await this.locators.unitedStatesOption().click();
     await this.locators.postedTodayRadio().click();
     await this.locators.filterSearchCheckbox().click();
 
-    console.log(`🔎 Job search filters applied. ${process.env.DATE_POSTED} for ${process.env.JOB_ROLE}`);
+    console.log(
+      `🔎 Job search filters applied. ${process.env.DATE_POSTED} for ${process.env.JOB_ROLE}`,
+    );
   }
 
   async GetPageNumber() {

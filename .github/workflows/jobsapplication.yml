@@ -1,15 +1,15 @@
 name: Apply for DICE jobs daily
+
 on:
   schedule:
     - cron: "0 12 * * *"  # Runs at 6 AM CST (12 PM UTC)
     - cron: "0 16 * * *"  # Runs at 10 AM CST (4 PM UTC)
-  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+  workflow_dispatch:
     inputs:
       job_role:
         description: "Enter the job role to search"
         required: false
         default: "java full stack developer"
-
       date_posted:
         description: "Select the job date posted"
         required: false
