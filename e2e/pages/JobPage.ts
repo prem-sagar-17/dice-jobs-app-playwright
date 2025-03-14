@@ -47,7 +47,7 @@ export class JobFunctions {
 
       if (!jobPage) {
         console.warn(
-          "⚠️ Job page opened in the same tab. Skipping popup handling.",
+          "⚠️ Job page opened in the same tab. Skipping popup handling."
         );
         return;
       }
@@ -75,9 +75,12 @@ export class JobFunctions {
       const corpToCorpLocator = this.locators.corpToCorp(jobPage);
 
       // Scroll into view before checking visibility
-      await corpToCorpLocator.scrollIntoViewIfNeeded();
+      const corpToCorpLocatorVisible = await this.scrollToElement(
+        corpToCorpLocator,
+        jobPage
+      );
 
-      if (!(await corpToCorpLocator.isVisible({ timeout: 10000 }).catch(() => false))) {
+      if (!corpToCorpLocatorVisible) {
         console.log(`❌ Skipping: ${jobTitle} (Corp to Corp not visible)`);
         this.jobResults.push({
           title: jobTitle,
@@ -90,7 +93,7 @@ export class JobFunctions {
       }
 
       console.log(
-        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application...",
+        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application..."
       );
 
       // ✅ Attempt Easy Apply if available
@@ -116,7 +119,7 @@ export class JobFunctions {
         });
       } catch (error) {
         console.log(
-          `❌ Easy Apply failed for: ${jobTitle} - ${(error as Error).message}`,
+          `❌ Easy Apply failed for: ${jobTitle} - ${(error as Error).message}`
         );
         this.jobResults.push({
           title: jobTitle,
@@ -133,6 +136,22 @@ export class JobFunctions {
     }
   }
 
+  async scrollToElement(
+    locator: Locator,
+    page: Page,
+    step: number = 200,
+    maxScrolls: number = 10
+  ) {
+    for (let i = 0; i < maxScrolls; i++) {
+      if (await locator.isVisible()) {
+        return true; // ✅ Element found
+      }
+      await page.mouse.wheel(0, step); // Scroll down by step
+      await page.waitForTimeout(500); // Allow page to render
+    }
+    return false; // ❌ Element not found after max attempts
+  }
+
   async exportToExcel() {
     if (this.jobResults.length === 0) {
       console.log("⚠️ No jobs processed. Skipping Excel export.");
@@ -143,13 +162,13 @@ export class JobFunctions {
 
     // Count totals directly from the stored values
     const totalApplied = this.jobResults.filter(
-      (job) => job.applied === "✅",
+      (job) => job.applied === "✅"
     ).length;
     const totalNotApplied = this.jobResults.filter(
-      (job) => job.notApplied === "✅",
+      (job) => job.notApplied === "✅"
     ).length;
     const totalAlreadyApplied = this.jobResults.filter(
-      (job) => job.alreadyApplied === "✅",
+      (job) => job.alreadyApplied === "✅"
     ).length;
 
     // Add Summary Row
