@@ -68,13 +68,12 @@ export class JobFunctions {
           notApplied: "❌",
           link: jobPage.url() || "N/A",
         });
-        return; // ✅ EARLY EXIT
+        return;
       }
 
       // Locate "Accepts corp to corp applications"
       const corpToCorpLocator = this.locators.corpToCorp(jobPage);
 
-      // Scroll into view before checking visibility
       const corpToCorpLocatorVisible = await this.scrollToElement(
         corpToCorpLocator,
         jobPage
@@ -89,7 +88,7 @@ export class JobFunctions {
           notApplied: "✅",
           link: jobPage.url() || "N/A",
         });
-        return; // ✅ EARLY EXIT
+        return;
       }
 
       console.log(
@@ -144,12 +143,12 @@ export class JobFunctions {
   ) {
     for (let i = 0; i < maxScrolls; i++) {
       if (await locator.isVisible()) {
-        return true; // ✅ Element found
+        return true;
       }
-      await page.mouse.wheel(0, step); // Scroll down by step
-      await page.waitForTimeout(500); // Allow page to render
+      await page.mouse.wheel(0, step);
+      await page.waitForTimeout(500);
     }
-    return false; // ❌ Element not found after max attempts
+    return false;
   }
 
   async exportToExcel() {
@@ -160,7 +159,6 @@ export class JobFunctions {
 
     console.log("📤 Exporting job results to Excel...");
 
-    // Count totals directly from the stored values
     const totalApplied = this.jobResults.filter(
       (job) => job.applied === "✅"
     ).length;
@@ -177,7 +175,7 @@ export class JobFunctions {
       applied: totalApplied.toString(),
       notApplied: totalNotApplied.toString(),
       alreadyApplied: totalAlreadyApplied.toString(),
-      link: "", // Empty cell for formatting
+      link: "",
     });
 
     const reportFolder = "xslx-reports"; // ✅ Store reports separately

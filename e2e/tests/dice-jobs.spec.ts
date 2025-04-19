@@ -18,7 +18,7 @@ test.describe("Dice Job Application Automation", () => {
       await loginFunctions.login(EMAIL, PASSWORD);
       await homeFunctions.searchJobs();
 
-      let pageNumber = 1
+      let pageNumber = 1;
 
       while (true) {
         console.log(`🔄 Processing job listings on page - ${pageNumber++}`);

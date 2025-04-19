@@ -10,17 +10,24 @@ export class LoginFunctions {
     this.locators = new Locators(page);
   }
 
-  async login(email: string, password: string) {
-    await this.page.goto("https://www.dice.com/dashboard/login");
-    await this.locators.emailField().waitFor({ state: "visible" });
-    await this.locators.emainInput().fill(email);
-    await this.locators.signInButton().click();
+  async login(
+    email: string | undefined,
+    password: string | undefined
+  ): Promise<void> {
+    if (email && password) {
+      await this.page.goto("https://www.dice.com/dashboard/login");
+      await this.locators.emailField().waitFor({ state: "visible" });
+      await this.locators.emainInput().fill(email);
+      await this.locators.signInButton().click();
 
-    await this.locators.passwordField().waitFor({ state: "visible" });
-    await this.locators.passwordInput().fill(password);
-    await this.locators.submitPasswordButton().click();
-    await this.page.waitForURL("https://www.dice.com/home-feed");
+      await this.locators.passwordField().waitFor({ state: "visible" });
+      await this.locators.passwordInput().fill(password);
+      await this.locators.submitPasswordButton().click();
+      await this.page.waitForURL("https://www.dice.com/home-feed");
 
-    console.log("✅ Logged in successfully.");
+      console.log("✅ Logged in successfully.");
+    } else {
+      throw new Error("Email or Password is undefined");
+    }
   }
 }

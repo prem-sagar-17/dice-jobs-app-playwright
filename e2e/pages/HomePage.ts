@@ -10,7 +10,7 @@ export class HomeFunctions {
     this.locators = new Locators(page);
   }
 
-  async searchJobs() {
+  async searchJobs(): Promise<void> {
     await this.locators
       .jobTitleField()
       .fill(process.env.JOB_ROLE || "java full stack developer");
@@ -21,7 +21,7 @@ export class HomeFunctions {
     await this.locators.filterSearchCheckbox().click();
 
     console.log(
-      `🔎 Job search filters applied. ${process.env.DATE_POSTED} for ${process.env.JOB_ROLE}`,
+      `🔎 Job search filters applied. ${process.env.DATE_POSTED} for ${process.env.JOB_ROLE}`
     );
   }
 
@@ -40,13 +40,11 @@ export class HomeFunctions {
   async GetPageNextButtonVisibility(): Promise<boolean> {
     const pageNext = this.locators.pageNext();
 
-    // Wait for page load
     await this.page.waitForLoadState("domcontentloaded");
 
-    // Check if the "Next Page" button is visible
     return await pageNext
       .waitFor({ state: "visible", timeout: 10000 })
       .then(() => true)
-      .catch(() => false); // Returns false if not visible
+      .catch(() => false);
   }
 }
