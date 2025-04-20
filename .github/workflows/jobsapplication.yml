@@ -3,7 +3,6 @@ name: Apply for DICE jobs daily
 on:
   schedule:
     - cron: "0 12 * * *"  # Runs at 6 AM CST (12 PM UTC)
-    - cron: "0 16 * * *"  # Runs at 10 AM CST (4 PM UTC)
   workflow_dispatch:
     inputs:
       job_role:
