@@ -99,23 +99,37 @@ export class JobFunctions {
       try {
         console.log(`🔄 Attempting Easy Apply for: ${jobTitle}`);
 
-        await this.locators.easyApplyButton(jobPage).waitFor({ timeout: 5000 });
+        await this.locators
+          .easyApplyButton(jobPage)
+          .waitFor({ timeout: 5 * 1000 });
         await this.locators.easyApplyButton(jobPage).click();
 
-        await this.locators.nextButton(jobPage).waitFor({ timeout: 5000 });
+        await this.locators.nextButton(jobPage).waitFor({ timeout: 5 * 1000 });
         await this.locators.nextButton(jobPage).click();
 
-        await this.locators.submitButton(jobPage).waitFor({ timeout: 5000 });
+        await this.locators
+          .submitButton(jobPage)
+          .waitFor({ timeout: 5 * 1000 });
         await this.locators.submitButton(jobPage).click();
 
-        console.log(`✅ Successfully applied: ${jobTitle}`);
-        this.jobResults.push({
-          title: jobTitle,
-          alreadyApplied: "❌",
-          applied: "✅",
-          notApplied: "❌",
-          link: jobPage.url() || "N/A",
-        });
+        await this.locators
+          .applicationSubmittedHeading(jobPage)
+          .waitFor({ timeout: 10 * 1000 });
+
+        if (
+          await this.locators.applicationSubmittedHeading(jobPage).isVisible()
+        ) {
+          console.log(`✅ Successfully applied: ${jobTitle}`);
+          this.jobResults.push({
+            title: jobTitle,
+            alreadyApplied: "❌",
+            applied: "✅",
+            notApplied: "❌",
+            link: jobPage.url() || "N/A",
+          });
+        } else {
+          throw new Error(`Error applying for job - ${jobTitle}`);
+        }
       } catch (error) {
         console.log(
           `❌ Easy Apply failed for: ${jobTitle} - ${(error as Error).message}`
