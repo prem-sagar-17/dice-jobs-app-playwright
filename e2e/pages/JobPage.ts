@@ -2,7 +2,7 @@ import { Page, Locator } from "@playwright/test";
 import { Locators } from "../components/dice-jobs-component";
 import * as fs from "fs";
 import * as path from "path";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 
 export class JobFunctions {
   readonly page: Page;
@@ -39,22 +39,18 @@ export class JobFunctions {
 
       console.log(`🚀 Applying for: ${jobTitle}`);
 
-      // Open job in a new tab
       [jobPage] = await Promise.all([
         this.page.waitForEvent("popup").catch(() => null),
         link.click(),
       ]);
 
       if (!jobPage) {
-        console.warn(
-          "⚠️ Job page opened in the same tab. Skipping popup handling."
-        );
+        console.warn("⚠️ Job page opened in the same tab. Skipping popup handling.");
         return;
       }
 
       const appsubmitted = this.locators.appSubmitted(jobPage);
 
-      // Check if job application is already submitted
       await appsubmitted
         .waitFor({ state: "visible", timeout: 10000 })
         .catch(() => false);
@@ -71,7 +67,6 @@ export class JobFunctions {
         return;
       }
 
-      // Locate "Accepts corp to corp applications"
       const corpToCorpLocator = this.locators.corpToCorp(jobPage);
 
       const corpToCorpLocatorVisible = await this.scrollToElement(
@@ -91,11 +86,8 @@ export class JobFunctions {
         return;
       }
 
-      console.log(
-        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application..."
-      );
+      console.log("✅ 'Accepts corp to corp applications' is visible. Proceeding with application...");
 
-      // ✅ Attempt Easy Apply if available
       try {
         console.log(`🔄 Attempting Easy Apply for: ${jobTitle}`);
 
@@ -173,17 +165,10 @@ export class JobFunctions {
 
     console.log("📤 Exporting job results to Excel...");
 
-    const totalApplied = this.jobResults.filter(
-      (job) => job.applied === "✅"
-    ).length;
-    const totalNotApplied = this.jobResults.filter(
-      (job) => job.notApplied === "✅"
-    ).length;
-    const totalAlreadyApplied = this.jobResults.filter(
-      (job) => job.alreadyApplied === "✅"
-    ).length;
+    const totalApplied = this.jobResults.filter(job => job.applied === "✅").length;
+    const totalNotApplied = this.jobResults.filter(job => job.notApplied === "✅").length;
+    const totalAlreadyApplied = this.jobResults.filter(job => job.alreadyApplied === "✅").length;
 
-    // Add Summary Row
     this.jobResults.push({
       title: "Total",
       applied: totalApplied.toString(),
@@ -192,19 +177,29 @@ export class JobFunctions {
       link: "",
     });
 
-    const reportFolder = "xslx-reports"; // ✅ Store reports separately
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Job Applications");
+
+    worksheet.columns = [
+      { header: "Title", key: "title", width: 40 },
+      { header: "Already Applied", key: "alreadyApplied", width: 20 },
+      { header: "Applied", key: "applied", width: 15 },
+      { header: "Not Applied", key: "notApplied", width: 15 },
+      { header: "Link", key: "link", width: 60 },
+    ];
+
+    this.jobResults.forEach(job => {
+      worksheet.addRow(job);
+    });
+
+    const reportFolder = "xlsx-reports";
     const filePath = path.join(reportFolder, "job_applications.xlsx");
 
-    // Ensure the folder exists before writing the file
     if (!fs.existsSync(reportFolder)) {
       fs.mkdirSync(reportFolder, { recursive: true });
     }
 
-    const ws = XLSX.utils.json_to_sheet(this.jobResults);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Job Applications");
-
-    XLSX.writeFile(wb, filePath);
+    await workbook.xlsx.writeFile(filePath);
     console.log(`✅ Job results saved to ${filePath}`);
   }
 }
