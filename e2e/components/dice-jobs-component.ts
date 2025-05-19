@@ -51,28 +51,45 @@ export class Locators {
     return this.page.getByText("United States", { exact: true }).nth(1);
   }
 
+  searchIcon() {
+    return this.page.getByTestId("job-search-search-bar-search-button");
+  }
+
+  allFilters() {
+    return this.page.getByRole("button", { name: "All filters" });
+  }
+
+  filterResultsHeading() {
+    return this.page.getByRole("heading", { name: "Filter Results" });
+  }
+
+  applyFilters() {
+    return this.page.getByRole("button", { name: "Apply filters" });
+  }
+
   postedTodayRadio() {
-    return this.page.getByRole("radio", {
-      name: `${process.env.DATE_POSTED || "Today"}`,
-    });
+    // return this.page.locator("label", { hasText: "Last 3 days" });
+    return this.page.locator("label", { hasText: "Today" });
   }
 
   filterSearchCheckbox() {
-    return this.page.getByRole("checkbox", {
-      name: "Filter Search Results by Third Party",
-    });
+    return this.page.locator("label", { hasText: "Third Party" });
   }
 
   jobCards() {
-    return this.page.locator("//div[@class='card search-card']");
+    return this.page.locator("[data-id]");
   }
 
   paginationItems() {
-    return this.page.locator("ul.pagination li");
+    return this.page.locator('section[aria-label^="Page"] span');
   }
 
   appliedMarkers(jobPage: Page) {
     return jobPage.locator("dhi-status-ribbon").getByText("applied");
+  }
+
+  jobSearchResultsContainer() {
+    return this.page.getByTestId("job-search-results-container");
   }
 
   // 🔹 Job Application Locators
@@ -105,12 +122,10 @@ export class Locators {
   }
 
   pageNextButton() {
-    return this.page.getByRole("link", { name: "»" });
+    return this.page.getByRole("link", { name: "Next" });
   }
 
-  pageNext() {
-    return this.page.locator(
-      "//li[@class='pagination-next page-item ng-star-inserted disabled']"
-    );
+  pageLast() {
+    return this.page.locator('span[aria-label="Last"]');
   }
 }

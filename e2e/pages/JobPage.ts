@@ -22,18 +22,37 @@ export class JobFunctions {
 
   async applyForJob(jobCard: Locator) {
     let jobPage: Page | null = null;
+    let easyApply = false;
+    let applied = false;
 
     try {
-      const link = jobCard.locator("xpath=.//h5//a");
-      const jobTitle = await link.innerText();
+      const jobTitleLocator = jobCard.locator(
+        'a[data-testid="job-search-job-detail-link"]'
+      );
+      const jobTitle = await jobTitleLocator.innerText();
+      console.log(">>>>>>>>>>>>>>>>>>>>>>");
+      console.log(jobTitle);
+      console.log("<<<<<<<<<<<<<<<<<<<<<<<");
       const isRelevant = /(java|developer|full stack)/i.test(jobTitle);
-      const appliedTextLocator = jobCard
-        .locator("span")
-        .filter({ hasText: "Applied" })
-        .first();
+      const parent = await jobCard.evaluateHandle((el) => el.parentElement);
 
-      if ((await appliedTextLocator.isVisible()) || !isRelevant) {
-        console.log("⏭️ Skipping: Already applied job found.");
+      if (parent) {
+        const text = await parent.evaluate((el) => (el ? el.innerText : ""));
+        const isRelevant = /(java|developer|full stack)/i.test(jobTitle);
+
+        if (text.includes("Easy Apply")) {
+          easyApply = true;
+        }
+        if (text.includes("Applied")) {
+          applied = true;
+        }
+      }
+
+      console.log(isRelevant);
+      if (!easyApply || applied || !isRelevant) {
+        console.log(
+          "⏭️ Skipping: Irrelevant job, no Easy Apply, or already applied job found."
+        );
         return;
       }
 
@@ -41,11 +60,13 @@ export class JobFunctions {
 
       [jobPage] = await Promise.all([
         this.page.waitForEvent("popup").catch(() => null),
-        link.click(),
+        jobCard.click(),
       ]);
 
       if (!jobPage) {
-        console.warn("⚠️ Job page opened in the same tab. Skipping popup handling.");
+        console.warn(
+          "⚠️ Job page opened in the same tab. Skipping popup handling."
+        );
         return;
       }
 
@@ -86,7 +107,9 @@ export class JobFunctions {
         return;
       }
 
-      console.log("✅ 'Accepts corp to corp applications' is visible. Proceeding with application...");
+      console.log(
+        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application..."
+      );
 
       try {
         console.log(`🔄 Attempting Easy Apply for: ${jobTitle}`);
@@ -165,9 +188,15 @@ export class JobFunctions {
 
     console.log("📤 Exporting job results to Excel...");
 
-    const totalApplied = this.jobResults.filter(job => job.applied === "✅").length;
-    const totalNotApplied = this.jobResults.filter(job => job.notApplied === "✅").length;
-    const totalAlreadyApplied = this.jobResults.filter(job => job.alreadyApplied === "✅").length;
+    const totalApplied = this.jobResults.filter(
+      (job) => job.applied === "✅"
+    ).length;
+    const totalNotApplied = this.jobResults.filter(
+      (job) => job.notApplied === "✅"
+    ).length;
+    const totalAlreadyApplied = this.jobResults.filter(
+      (job) => job.alreadyApplied === "✅"
+    ).length;
 
     this.jobResults.push({
       title: "Total",
@@ -188,7 +217,7 @@ export class JobFunctions {
       { header: "Link", key: "link", width: 60 },
     ];
 
-    this.jobResults.forEach(job => {
+    this.jobResults.forEach((job) => {
       worksheet.addRow(job);
     });
 
