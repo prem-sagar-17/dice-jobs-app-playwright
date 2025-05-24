@@ -28,8 +28,7 @@ test.describe("Dice Job Application Automation", () => {
 
       const totalPagesCount = await homeFunctions.GetTotalPages();
       if (totalPagesCount) {
-        const totalPagesText = await totalPagesCount.nth(1).innerText();
-        const totalPages = parseInt(totalPagesText.trim(), 10);
+        const totalPages = parseInt(totalPagesCount.trim(), 10);
         console.log(`📄 Total job pages found: ${totalPages}`);
       } else {
         console.log("📄 Only one job page available.");
