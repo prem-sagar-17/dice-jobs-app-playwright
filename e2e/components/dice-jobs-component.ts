@@ -67,9 +67,8 @@ export class Locators {
     return this.page.getByRole("button", { name: "Apply filters" });
   }
 
-  postedTodayRadio() {
-    // return this.page.locator("label", { hasText: "Last 3 days" });
-    return this.page.locator("label", { hasText: "Today" });
+  postedDate(labelText: string) {
+    return this.page.locator("label", { hasText: labelText });
   }
 
   filterSearchCheckbox() {

@@ -30,9 +30,6 @@ export class JobFunctions {
         'a[data-testid="job-search-job-detail-link"]'
       );
       const jobTitle = await jobTitleLocator.innerText();
-      console.log(">>>>>>>>>>>>>>>>>>>>>>");
-      console.log(jobTitle);
-      console.log("<<<<<<<<<<<<<<<<<<<<<<<");
       const isRelevant = /(java|developer|full stack)/i.test(jobTitle);
       const parent = await jobCard.evaluateHandle((el) => el.parentElement);
 
