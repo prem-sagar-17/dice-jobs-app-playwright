@@ -1,4 +1,4 @@
-name: Apply for DICE jAVA FULL STACK DEVELOPER jobs daily
+name: Apply for DICE JAVA FULL STACK DEVELOPER jobs daily
 
 on:
   schedule:
@@ -43,8 +43,12 @@ jobs:
       - name: Verify Playwright Installation
         run: npx playwright --version
 
-      - name: Run Playwright Jobs Apply Script
-        run: npx playwright test
+      - name: Run Playwright Jobs Apply Script with Retry
+        id: run-tests
+        run: |
+          npx playwright test || \
+          (echo "Retrying... Attempt 2" && npx playwright test) || \
+          (echo "Retrying... Attempt 3" && npx playwright test)
         env:
           EMAIL: ${{ secrets.DICE_EMAIL }}
           PASSWORD: ${{ secrets.DICE_PASSWORD }}
