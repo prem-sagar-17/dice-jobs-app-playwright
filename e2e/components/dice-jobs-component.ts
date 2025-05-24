@@ -121,7 +121,7 @@ export class Locators {
   }
 
   pageNextButton() {
-    return this.page.getByRole("link", { name: "Next" });
+    return this.page.locator('[aria-label="Next"][role="link"]')
   }
 
   pageLast() {
