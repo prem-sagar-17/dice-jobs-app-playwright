@@ -29,21 +29,22 @@ export class HomeFunctions {
       timeout: 40000,
     });
 
-    await this.locators.allFilters().click();
+    await this.locators.allFilters().click({force: true});
     await this.dismissPopupIfVisible();
 
     const labelText = process.env.DATE_POSTED || "Today";
-    await this.locators.postedDate(labelText).click();
-    await this.locators.filterSearchCheckbox().click();
-    await this.locators.applyFilters().click();
+    await this.locators.postedDate(labelText).click({force: true});
+    await this.locators.filterSearchCheckbox().click({force: true});
+    await this.locators.applyFilters().click({force: true});
+    await this.page.waitForTimeout(10 * 1000)
 
     console.log(`🔎 Job search filters applied: '${labelText}' with 'Third Party'`);
   }
 
-  async GetTotalPages(): Promise<Locator | undefined> {
+  async GetTotalPages(): Promise<string | null | undefined> {
     if (await this.IsLocatorVisible(this.locators.paginationItems())) {
       console.log("✅ Pagination items are visible.");
-      return this.locators.paginationItems();
+      return await this.locators.paginationItems().nth(1).textContent();
     }
     return undefined;
   }
@@ -96,7 +97,7 @@ export class HomeFunctions {
   }
 
   async dismissPopupIfVisible(): Promise<void> {
-    const dismissLocator = await this.locators.dismissPopUp()
+    const dismissLocator = this.locators.dismissPopUp()
     const isVisible = await dismissLocator.isVisible();
   
     if (isVisible) {

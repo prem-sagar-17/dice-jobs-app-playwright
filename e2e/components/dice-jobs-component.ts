@@ -80,7 +80,7 @@ export class Locators {
   }
 
   paginationItems() {
-    return this.page.locator('section[aria-label^="Page"] span');
+    return this.page.locator('section[aria-label^="Page"]');
   }
 
   appliedMarkers(jobPage: Page) {
