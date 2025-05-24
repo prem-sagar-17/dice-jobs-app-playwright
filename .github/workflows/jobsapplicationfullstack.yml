@@ -1,0 +1,68 @@
+name: Apply for DICE jAVA FULL STACK DEVELOPER jobs daily
+
+on:
+  schedule:
+    - cron: "0 11 * * *"    # Runs at 6:00 AM CDT
+    - cron: "30 15 * * *"   # Runs at 10:30 AM CDT
+  workflow_dispatch:
+    inputs:
+      job_role:
+        description: "Enter the job role to search"
+        required: false
+        default: "java full stack developer"
+      date_posted:
+        description: "Select the job date posted"
+        required: false
+        default: "Today"
+        type: choice
+        options:
+          - "Today"
+          - "Last 3 Days"
+          - "Last 7 Days"
+          - "Any Date"
+
+jobs:
+  dice_job_application:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify Playwright Installation
+        run: npx playwright --version
+
+      - name: Run Playwright Jobs Apply Script
+        run: npx playwright test
+        env:
+          EMAIL: ${{ secrets.DICE_EMAIL }}
+          PASSWORD: ${{ secrets.DICE_PASSWORD }}
+          JOB_ROLE: ${{ github.event.inputs.job_role || 'java full stack developer' }}
+          DATE_POSTED: ${{ github.event.inputs.date_posted || 'Today' }}
+
+      - name: Upload Playwright Reports
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 2
+
+      - name: Upload Job Applications Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: job-applications-report
+          path: xslx-reports/job_applications.xlsx
+          retention-days: 7

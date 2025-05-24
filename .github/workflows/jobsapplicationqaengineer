@@ -1,4 +1,4 @@
-name: Apply for DICE jobs daily
+name: Apply for DICE QA ENGINEER jobs daily
 
 on:
   schedule:
@@ -9,7 +9,7 @@ on:
       job_role:
         description: "Enter the job role to search"
         required: false
-        default: "java full stack developer"
+        default: "qa engineer"
       date_posted:
         description: "Select the job date posted"
         required: false
@@ -46,9 +46,9 @@ jobs:
       - name: Run Playwright Jobs Apply Script
         run: npx playwright test
         env:
-          EMAIL: ${{ secrets.DICE_EMAIL }}
-          PASSWORD: ${{ secrets.DICE_PASSWORD }}
-          JOB_ROLE: ${{ github.event.inputs.job_role || 'java full stack developer' }}
+          EMAIL: ${{ secrets.DICE_EMAIL_QA_ENGINEER }}
+          PASSWORD: ${{ secrets.DICE_PASSWORD_QA_ENGINEER }}
+          JOB_ROLE: ${{ github.event.inputs.job_role || 'qa engineer' }}
           DATE_POSTED: ${{ github.event.inputs.date_posted || 'Today' }}
 
       - name: Upload Playwright Reports

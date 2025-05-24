@@ -20,36 +20,32 @@ export class JobFunctions {
     this.locators = new Locators(page);
   }
 
-  async applyForJob(jobCard: Locator) {
+  async applyForJob(jobRole: string | undefined, jobCard: Locator) {
     let jobPage: Page | null = null;
     let easyApply = false;
     let applied = false;
 
     try {
-      const jobTitleLocator = jobCard.locator(
-        'a[data-testid="job-search-job-detail-link"]'
-      );
+      const jobTitleLocator = jobCard.locator('a[data-testid="job-search-job-detail-link"]');
       const jobTitle = await jobTitleLocator.innerText();
-      const isRelevant = /(java|developer|full stack)/i.test(jobTitle);
-      const parent = await jobCard.evaluateHandle((el) => el.parentElement);
 
-      if (parent) {
-        const text = await parent.evaluate((el) => (el ? el.innerText : ""));
-        const isRelevant = /(java|developer|full stack)/i.test(jobTitle);
-
-        if (text.includes("Easy Apply")) {
-          easyApply = true;
-        }
-        if (text.includes("Applied")) {
-          applied = true;
-        }
+      let isRelevant = false;
+      if (jobRole?.includes("full stack")) {
+        isRelevant = /(java|developer|full stack)/i.test(jobTitle);
+      } else if (jobRole?.includes("qa engineer")) {
+        isRelevant = /\b(qa|automation|tester|analyst|test|quality\s?assurance|quality\s?engineer)\b/i.test(jobTitle);
+      } else {
+        throw new Error(`Unsupported job role: ${jobRole}`);
       }
 
-      console.log(isRelevant);
+      const parent = await jobCard.evaluateHandle(el => el.parentElement);
+      const text = parent ? await parent.evaluate(el => el?.innerText || "") : "";
+
+      if (text.includes("Easy Apply")) easyApply = true;
+      if (text.includes("Applied")) applied = true;
+
       if (!easyApply || applied || !isRelevant) {
-        console.log(
-          "⏭️ Skipping: Irrelevant job, no Easy Apply, or already applied job found."
-        );
+        console.log("⏭️ Skipping: Irrelevant job, no Easy Apply, or already applied.");
         return;
       }
 
@@ -61,20 +57,15 @@ export class JobFunctions {
       ]);
 
       if (!jobPage) {
-        console.warn(
-          "⚠️ Job page opened in the same tab. Skipping popup handling."
-        );
+        console.warn("⚠️ Job page opened in the same tab. Skipping popup handling.");
         return;
       }
 
-      const appsubmitted = this.locators.appSubmitted(jobPage);
+      const appSubmitted = this.locators.appSubmitted(jobPage);
+      const wasSubmitted = await appSubmitted.isVisible().catch(() => false);
 
-      await appsubmitted
-        .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => false);
-
-      if (await appsubmitted.isVisible().catch(() => false)) {
-        console.log(`⏭️ Skipping: ${jobTitle} (Job already applied)`);
+      if (wasSubmitted) {
+        console.log(`⏭️ Already applied: ${jobTitle}`);
         this.jobResults.push({
           title: jobTitle,
           alreadyApplied: "✅",
@@ -86,13 +77,9 @@ export class JobFunctions {
       }
 
       const corpToCorpLocator = this.locators.corpToCorp(jobPage);
+      const corpToCorpVisible = await this.scrollToElement(corpToCorpLocator, jobPage);
 
-      const corpToCorpLocatorVisible = await this.scrollToElement(
-        corpToCorpLocator,
-        jobPage
-      );
-
-      if (!corpToCorpLocatorVisible) {
+      if (!corpToCorpVisible) {
         console.log(`❌ Skipping: ${jobTitle} (Corp to Corp not visible)`);
         this.jobResults.push({
           title: jobTitle,
@@ -104,33 +91,24 @@ export class JobFunctions {
         return;
       }
 
-      console.log(
-        "✅ 'Accepts corp to corp applications' is visible. Proceeding with application..."
-      );
+      console.log("✅ Corp to Corp option visible. Proceeding with Easy Apply...");
 
       try {
         console.log(`🔄 Attempting Easy Apply for: ${jobTitle}`);
 
-        await this.locators
-          .easyApplyButton(jobPage)
-          .waitFor({ timeout: 5 * 1000 });
+        await this.locators.easyApplyButton(jobPage).waitFor({ timeout: 5000 });
         await this.locators.easyApplyButton(jobPage).click();
 
-        await this.locators.nextButton(jobPage).waitFor({ timeout: 5 * 1000 });
+        await this.locators.nextButton(jobPage).waitFor({ timeout: 5000 });
         await this.locators.nextButton(jobPage).click();
 
-        await this.locators
-          .submitButton(jobPage)
-          .waitFor({ timeout: 5 * 1000 });
+        await this.locators.submitButton(jobPage).waitFor({ timeout: 5000 });
         await this.locators.submitButton(jobPage).click();
 
-        await this.locators
-          .applicationSubmittedHeading(jobPage)
-          .waitFor({ timeout: 10 * 1000 });
+        await this.locators.applicationSubmittedHeading(jobPage).waitFor({ timeout: 10000 });
 
-        if (
-          await this.locators.applicationSubmittedHeading(jobPage).isVisible()
-        ) {
+        const success = await this.locators.applicationSubmittedHeading(jobPage).isVisible().catch(() => false);
+        if (success) {
           console.log(`✅ Successfully applied: ${jobTitle}`);
           this.jobResults.push({
             title: jobTitle,
@@ -140,12 +118,10 @@ export class JobFunctions {
             link: jobPage.url() || "N/A",
           });
         } else {
-          throw new Error(`Error applying for job - ${jobTitle}`);
+          throw new Error(`Application not confirmed for ${jobTitle}`);
         }
       } catch (error) {
-        console.log(
-          `❌ Easy Apply failed for: ${jobTitle} - ${(error as Error).message}`
-        );
+        console.log(`❌ Easy Apply failed: ${jobTitle} - ${(error as Error).message}`);
         this.jobResults.push({
           title: jobTitle,
           alreadyApplied: "❌",
@@ -166,18 +142,16 @@ export class JobFunctions {
     page: Page,
     step: number = 200,
     maxScrolls: number = 10
-  ) {
+  ): Promise<boolean> {
     for (let i = 0; i < maxScrolls; i++) {
-      if (await locator.isVisible()) {
-        return true;
-      }
+      if (await locator.isVisible()) return true;
       await page.mouse.wheel(0, step);
       await page.waitForTimeout(500);
     }
     return false;
   }
 
-  async exportToExcel() {
+  async exportToExcel(): Promise<void> {
     if (this.jobResults.length === 0) {
       console.log("⚠️ No jobs processed. Skipping Excel export.");
       return;
@@ -185,15 +159,9 @@ export class JobFunctions {
 
     console.log("📤 Exporting job results to Excel...");
 
-    const totalApplied = this.jobResults.filter(
-      (job) => job.applied === "✅"
-    ).length;
-    const totalNotApplied = this.jobResults.filter(
-      (job) => job.notApplied === "✅"
-    ).length;
-    const totalAlreadyApplied = this.jobResults.filter(
-      (job) => job.alreadyApplied === "✅"
-    ).length;
+    const totalApplied = this.jobResults.filter(j => j.applied === "✅").length;
+    const totalNotApplied = this.jobResults.filter(j => j.notApplied === "✅").length;
+    const totalAlreadyApplied = this.jobResults.filter(j => j.alreadyApplied === "✅").length;
 
     this.jobResults.push({
       title: "Total",
@@ -214,9 +182,7 @@ export class JobFunctions {
       { header: "Link", key: "link", width: 60 },
     ];
 
-    this.jobResults.forEach((job) => {
-      worksheet.addRow(job);
-    });
+    this.jobResults.forEach(job => worksheet.addRow(job));
 
     const reportFolder = "xlsx-reports";
     const filePath = path.join(reportFolder, "job_applications.xlsx");
