@@ -30,6 +30,7 @@ export class HomeFunctions {
     });
 
     await this.locators.allFilters().click();
+    await this.dismissPopupIfVisible();
 
     const labelText = process.env.DATE_POSTED || "Today";
     await this.locators.postedDate(labelText).click();
@@ -93,4 +94,17 @@ export class HomeFunctions {
       return false;
     }
   }
+
+  async dismissPopupIfVisible(): Promise<void> {
+    const dismissLocator = await this.locators.dismissPopUp()
+    const isVisible = await dismissLocator.isVisible();
+  
+    if (isVisible) {
+      console.log("⚠️ Dismiss popup detected. Clicking...");
+      await dismissLocator.click();
+      await this.page.waitForTimeout(1000);
+    } else {
+      console.log("✅ No dismiss popup detected.");
+    }
+  }  
 }

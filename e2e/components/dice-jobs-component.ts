@@ -127,4 +127,8 @@ export class Locators {
   pageLast() {
     return this.page.locator('span[aria-label="Last"]');
   }
+
+  dismissPopUp() {
+    return this.page.locator('span.flex:has-text("Dismiss")');
+  }
 }
