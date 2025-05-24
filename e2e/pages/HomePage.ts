@@ -29,13 +29,13 @@ export class HomeFunctions {
       timeout: 40000,
     });
 
-    await this.locators.allFilters().click({force: true});
+    await this.locators.allFilters().click();
     await this.dismissPopupIfVisible();
 
     const labelText = process.env.DATE_POSTED || "Today";
-    await this.locators.postedDate(labelText).click({force: true});
-    await this.locators.filterSearchCheckbox().click({force: true});
-    await this.locators.applyFilters().click({force: true});
+    await this.locators.postedDate(labelText).click();
+    await this.locators.filterSearchCheckbox().click();
+    await this.locators.applyFilters().click();
     await this.page.waitForTimeout(10 * 1000)
 
     console.log(`🔎 Job search filters applied: '${labelText}' with 'Third Party'`);
