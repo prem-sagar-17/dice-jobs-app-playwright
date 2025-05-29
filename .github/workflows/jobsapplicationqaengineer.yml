@@ -3,7 +3,7 @@ name: Apply for DICE QA ENGINEER jobs daily
 on:
   schedule:
     - cron: "0 11 * * *"    # Runs at 6:00 AM CDT
-    - cron: "30 15 * * *"   # Runs at 10:30 AM CDT
+    - cron: "0 14 * * *"   # Runs at 9:00 AM CDT
   workflow_dispatch:
     inputs:
       job_role:
