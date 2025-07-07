@@ -131,4 +131,12 @@ export class Locators {
   dismissPopUp() {
     return this.page.locator('span.flex:has-text("Dismiss")');
   }
+
+  RejectAllButton(){
+    return this.page.getByRole('button', { name: 'Reject all' })
+  }
+
+  consentClose(){
+    return this.page.getByRole('link').filter({ hasText: /^$/ })
+  }
 }

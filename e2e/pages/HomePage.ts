@@ -25,6 +25,7 @@ export class HomeFunctions {
     await expect(this.locators.jobSearchResultsContainer()).toBeVisible({
       timeout: 40000,
     });
+    await this.dismissConsentIfVisible();
     await expect(this.locators.allFilters()).toBeVisible({
       timeout: 40000,
     });
@@ -36,9 +37,11 @@ export class HomeFunctions {
     await this.locators.postedDate(labelText).click();
     await this.locators.filterSearchCheckbox().click();
     await this.locators.applyFilters().click();
-    await this.page.waitForTimeout(10 * 1000)
+    await this.page.waitForTimeout(10 * 1000);
 
-    console.log(`🔎 Job search filters applied: '${labelText}' with 'Third Party'`);
+    console.log(
+      `🔎 Job search filters applied: '${labelText}' with 'Third Party'`
+    );
   }
 
   async GetTotalPages(): Promise<string | null | undefined> {
@@ -70,7 +73,8 @@ export class HomeFunctions {
 
       if (isVisible) {
         const pageNext = this.locators.pageLast();
-        const isDisabled = (await pageNext.getAttribute("aria-disabled")) === "true";
+        const isDisabled =
+          (await pageNext.getAttribute("aria-disabled")) === "true";
 
         if (!isDisabled) {
           console.log("✅ Next button is visible and enabled.");
@@ -97,9 +101,9 @@ export class HomeFunctions {
   }
 
   async dismissPopupIfVisible(): Promise<void> {
-    const dismissLocator = this.locators.dismissPopUp()
+    const dismissLocator = this.locators.dismissPopUp();
     const isVisible = await dismissLocator.isVisible();
-  
+
     if (isVisible) {
       console.log("⚠️ Dismiss popup detected. Clicking...");
       await dismissLocator.click();
@@ -107,5 +111,17 @@ export class HomeFunctions {
     } else {
       console.log("✅ No dismiss popup detected.");
     }
-  }  
+  }
+
+  async dismissConsentIfVisible(): Promise<void> {
+    const consentLocator = this.locators.RejectAllButton();
+
+    if (await consentLocator.isVisible()) {
+      console.log("⚠️ Consent popup detected. Clicking...");
+      await consentLocator.click();
+      await this.page.waitForTimeout(1000);
+    } else {
+      console.log("✅ No consent popup detected.");
+    }
+  }
 }
