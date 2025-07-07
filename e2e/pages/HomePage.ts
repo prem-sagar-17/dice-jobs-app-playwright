@@ -25,13 +25,12 @@ export class HomeFunctions {
     await expect(this.locators.jobSearchResultsContainer()).toBeVisible({
       timeout: 40000,
     });
-    await this.dismissConsentIfVisible();
+    await this.acceptConsentIfVisible();
     await expect(this.locators.allFilters()).toBeVisible({
       timeout: 40000,
     });
-
-    await this.locators.allFilters().click();
     await this.dismissPopupIfVisible();
+    await this.locators.allFilters().click();
 
     const labelText = process.env.DATE_POSTED || "Today";
     await this.locators.postedDate(labelText).click();
@@ -113,8 +112,8 @@ export class HomeFunctions {
     }
   }
 
-  async dismissConsentIfVisible(): Promise<void> {
-    const consentLocator = this.locators.RejectAllButton();
+  async acceptConsentIfVisible(): Promise<void> {
+    const consentLocator = this.locators.acceptAllButton();
 
     if (await consentLocator.isVisible()) {
       console.log("⚠️ Consent popup detected. Clicking...");

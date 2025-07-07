@@ -132,8 +132,8 @@ export class Locators {
     return this.page.locator('span.flex:has-text("Dismiss")');
   }
 
-  RejectAllButton(){
-    return this.page.getByRole('button', { name: 'Reject all' })
+  acceptAllButton(){
+    return this.page.getByRole('button', { name: 'Allow all' })
   }
 
   consentClose(){
