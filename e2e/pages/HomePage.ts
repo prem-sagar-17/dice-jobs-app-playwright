@@ -46,7 +46,7 @@ export class HomeFunctions {
   async GetTotalPages(): Promise<string | null | undefined> {
     if (await this.IsLocatorVisible(this.locators.paginationItems())) {
       console.log("✅ Pagination items are visible.");
-      return await this.locators.paginationItems().nth(1).textContent();
+      return await this.locators.paginationItems().first().textContent();
     }
     return undefined;
   }
